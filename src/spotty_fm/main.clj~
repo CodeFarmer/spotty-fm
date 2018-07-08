@@ -1,2 +1,0 @@
-(ns spotty-fm.main
-  (:gen-class))
