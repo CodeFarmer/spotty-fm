@@ -1,3 +1,21 @@
 - [X] Get tagged tracks for last.fm user and tag
+- [X] Get loved tracks for user
 - [X] Get tracks from spotify given title and artist
+
+- [ ] deal with pagination of last.fm response
+
+- [ ] configure the location of credential files less crappily
+
+- [ ] map from last.fm track to spotify track
+  - [ ] pick first response?
+  - [ ] deal with errors or no-resp
+
+- [ ] build list of spotify tracks (IDs) from last.fm list
+  - [ ] best effort
+  - [ ] record misses
+  - [ ] dump to file?
+  - [ ] write/read local mapping file for known misses?
+    - [ ] mbid ->
+    - [ ] without mbid, artist and track?
+
 - [ ] build playlist in spotify given track list
