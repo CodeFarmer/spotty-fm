@@ -25,12 +25,15 @@
 
 (defn -main [arg & args]
 
-  (case arg
+  (println
+   (json/write-str
 
-    "user-tag" (let [[user tag] args]
-                 (if-let [resp (lastfm/fetch-user-tagged-tracks (:apikey (:lastfm config)) user tag)]
-                   (println (map lastfm/simple-track (get-in resp [:taggings :tracks :track])))))
-    
-    "user-loved" (let [user (first args)]
-                 (if-let [resp (lastfm/fetch-user-loved-tracks (:apikey (:lastfm config)) user)]
-                   (println (map lastfm/simple-track (get-in resp [:lovedtracks :track])))))))
+    (case arg
+
+      "user-tag" (let [[user tag] args]
+                   (if-let [resp (lastfm/fetch-user-tagged-tracks (:apikey (:lastfm config)) user tag)]
+                     (map lastfm/simple-track (get-in resp [:taggings :tracks :track]))))
+              
+      "user-loved" (let [user (first args)]
+                     (if-let [resp (lastfm/fetch-user-loved-tracks (:apikey (:lastfm config)) user)]
+                       (map lastfm/simple-track (get-in resp [:lovedtracks :track]))))))))
