@@ -2,17 +2,12 @@
 
   (:require [org.httpkit.client :as http]
             [clojure.data.json :as json]
-            [environ.core :refer [env]]
             [spotty-fm.lastfm :as lastfm]
+            [spotty-fm.core :refer [config]]
             [org.httpkit.server :as server])
   
   (:gen-class))
 
-(def config
-  {:lastfm  (json/read-str (slurp (str (env :home) \/ "Dropbox/last.fm.json"))
-                           :key-fn keyword)
-   :spotify (json/read-str (slurp (str (env :home) \/ "Dropbox/spotify.json"))
-                           :key-fn keyword)})
 
 (defn accept-spotify-auth [req]
    {:status  200
