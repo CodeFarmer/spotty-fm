@@ -2,7 +2,15 @@
 - [X] Get loved tracks for user
 - [X] Get tracks from spotify given title and artist
 
+- [X] client integration tests
+  - [X] spotify
+  - [X] last.fm
+
 - [ ] deal with pagination of last.fm response
+
+- [ ] unit tests?
+  - [ ] mock HTTP thingy
+  - [ ] use to test-drive the next bits
 
 - [ ] configure the location of credential files less crappily
 
