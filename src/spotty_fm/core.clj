@@ -12,4 +12,5 @@
 
 (def config
 
-  (json/read-str (slurp (str (env :pwd) \/ "config.json"))))
+  (json/read-str (slurp (str (env :pwd) \/ "config.json"))
+                 :key-fn keyword))
