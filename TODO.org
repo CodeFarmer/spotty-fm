@@ -6,13 +6,16 @@
   - [X] spotify
   - [X] last.fm
 
+- [ ] configure the location of credential files less crappily
+
+- [ ] config/authentication errors better?
+
 - [ ] deal with pagination of last.fm response
 
 - [ ] unit tests?
   - [ ] mock HTTP thingy
   - [ ] use to test-drive the next bits
 
-- [ ] configure the location of credential files less crappily
 
 - [ ] map from last.fm track to spotify track
   - [ ] pick first response?
