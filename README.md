@@ -10,10 +10,15 @@ file in the root directory.
 #### last.fm
 
 ```bash
-lein run user-tag CodeFarmer "greatest songs of all time"
+lein run lastfm-user-tag CodeFarmer "greatest songs of all time"
 ```
 
 ```bash
-lein run user-loved CodeFarmer
+lein run lastfm-user-loved CodeFarmer
 ```
 
+#### spotify
+
+```bash
+lein run spotify-search-tracks "Christine and the Queens Tilted"
+```

@@ -3,6 +3,7 @@
   (:require [org.httpkit.client :as http]
             [clojure.data.json :as json]
             [spotty-fm.lastfm :as lastfm]
+            [spotty-fm.spotify :as spotify]
             [spotty-fm.core :refer [config]]
             [org.httpkit.server :as server])
   
@@ -25,10 +26,18 @@
 
     (case arg
 
-      "user-tag" (let [[user tag] args]
+      "lastfm-user-tag" (let [[user tag] args]
                    (if-let [resp (lastfm/fetch-user-tagged-tracks (:apikey (:lastfm config)) user tag)]
                      (map lastfm/simple-track (get-in resp [:taggings :tracks :track]))))
               
-      "user-loved" (let [user (first args)]
+      "lastfm-user-loved" (let [user (first args)]
                      (if-let [resp (lastfm/fetch-user-loved-tracks (:apikey (:lastfm config)) user)]
-                       (map lastfm/simple-track (get-in resp [:lovedtracks :track]))))))))
+                       (map lastfm/simple-track (get-in resp [:lovedtracks :track]))))
+
+      "spotify-search-tracks" (let [term (first args)
+                                    token (:access_token (spotify/fetch-client-auth-token
+                                                          (:clientid (:spotify config))
+                                                          (:secret (:spotify config))))]
+                                    
+                                    (if-let [resp (spotify/search-tracks token term)]
+                                      (map spotify/simple-track (get-in resp [:tracks :items]))))))))

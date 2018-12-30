@@ -8,6 +8,8 @@
 
 - [X] configure the location of credential files less crappily
 
+- [X] command line spotify calls
+
 - [ ] config/authentication errors better?
   - [ ] auth errors
   - [ ] use spec to describe config?
