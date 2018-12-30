@@ -6,9 +6,11 @@
   - [X] spotify
   - [X] last.fm
 
-- [ ] configure the location of credential files less crappily
+- [X] configure the location of credential files less crappily
 
 - [ ] config/authentication errors better?
+  - [ ] auth errors
+  - [ ] use spec to describe config?
 
 - [ ] deal with pagination of last.fm response
 
