@@ -10,6 +10,14 @@
 
 - [X] command line spotify calls
 
+- [X] Hide the base calls with wrapping in simple-track
+
+- [ ] map from last.fm track to spotify track
+  - [ ] pick first response?
+  - [ ] deal with errors or no-resp
+  - [ ] add progress bar
+    - https://github.com/ctongfei/progressbar
+
 - [ ] config/authentication errors better?
   - [ ] auth errors
   - [ ] use spec to describe config?
@@ -19,11 +27,6 @@
 - [ ] unit tests?
   - [ ] mock HTTP thingy
   - [ ] use to test-drive the next bits
-
-
-- [ ] map from last.fm track to spotify track
-  - [ ] pick first response?
-  - [ ] deal with errors or no-resp
 
 - [ ] build list of spotify tracks (IDs) from last.fm list
   - [ ] best effort

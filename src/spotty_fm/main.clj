@@ -27,17 +27,14 @@
     (case arg
 
       "lastfm-user-tag" (let [[user tag] args]
-                   (if-let [resp (lastfm/fetch-user-tagged-tracks (:apikey (:lastfm config)) user tag)]
-                     (map lastfm/simple-track (get-in resp [:taggings :tracks :track]))))
+                          (lastfm/user-tagged-tracks (:apikey (:lastfm config)) user tag))
               
       "lastfm-user-loved" (let [user (first args)]
-                     (if-let [resp (lastfm/fetch-user-loved-tracks (:apikey (:lastfm config)) user)]
-                       (map lastfm/simple-track (get-in resp [:lovedtracks :track]))))
+                            (lastfm/user-loved-tracks (:apikey (:lastfm config)) user))
 
       "spotify-search-tracks" (let [term (first args)
                                     token (:access_token (spotify/fetch-client-auth-token
                                                           (:clientid (:spotify config))
                                                           (:secret (:spotify config))))]
                                     
-                                    (if-let [resp (spotify/search-tracks token term)]
-                                      (map spotify/simple-track (get-in resp [:tracks :items]))))))))
+                                    (spotify/search-tracks token term))))))

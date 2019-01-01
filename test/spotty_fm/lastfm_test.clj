@@ -7,7 +7,7 @@
 (deftest test-user-tagged
 
   (testing "Connecting to the live last.fm server, retrieve a user's tagged tracks"
-    (let [resp (fetch-user-tagged-tracks (:apikey (:lastfm config)) "CodeFarmer" "ohrwurm")]
+    (let [resp (-user-tagged-tracks (:apikey (:lastfm config)) "CodeFarmer" "ohrwurm")]
 
       (is (contains? resp :taggings) "Response should contain a taggings element")
       (is (contains? (:taggings resp) :tracks) "taggings should contain a tracks element")
@@ -18,7 +18,7 @@
 (deftest test-user-loved
 
   (testing "Connecting to the live last.fm server, retrieve a user's tagged tracks"
-    (let [resp (fetch-user-loved-tracks (:apikey (:lastfm config)) "CodeFarmer")]
+    (let [resp (-user-loved-tracks (:apikey (:lastfm config)) "CodeFarmer")]
 
       (is (contains? resp :lovedtracks) "Response should contain a lovedtracks element")
       (is (contains? (:lovedtracks resp) :track) "lovedtracks should contain a track element")

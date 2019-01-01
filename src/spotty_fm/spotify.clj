@@ -25,9 +25,13 @@
    :isrc (:isrc (:external_ids lastfm-track))})
 
 ;; (first (:items (:tracks (search-tracks t "Sonic Youth Becuz)))
-(defn search-tracks [token q]
+(defn -search-tracks [token q]
   (let [{:keys [status headers body error] :as resp}
         @(http/get "https://api.spotify.com/v1/search" {:headers { "Authorization" (str "Bearer " token)}
                                                         :query-params {:type "track"
                                                                        :q q}})]
     (json/read-str body :key-fn keyword)))
+
+(defn search-tracks [token q]
+  (if-let [resp (-search-tracks token q)]
+    (map simple-track (get-in resp [:tracks :items]))))

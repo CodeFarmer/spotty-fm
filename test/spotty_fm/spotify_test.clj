@@ -19,7 +19,7 @@
   (testing "Connecting to the live Spotify service, track search should work"
     (let [t (:access_token (fetch-client-auth-token (:clientid (:spotify config))
                                                     (:secret (:spotify config))))
-          resp (search-tracks t "DJ Shadow Building Steam With A Grain Of Salt")]
+          resp (-search-tracks t "DJ Shadow Building Steam With A Grain Of Salt")]
 
       (is (contains? resp :tracks) "The search response should contain a tracks field")
       (is (> (count (:items (:tracks resp))) 0) "There should be one or more track items in the search response"))))
