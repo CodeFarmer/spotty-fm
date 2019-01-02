@@ -35,3 +35,6 @@
 (defn search-tracks [token q]
   (if-let [resp (-search-tracks token q)]
     (map simple-track (get-in resp [:tracks :items]))))
+
+(defn search-track [token q]
+  (first (search-tracks token q)))

@@ -12,11 +12,16 @@
 
 - [X] Hide the base calls with wrapping in simple-track
 
-- [ ] map from last.fm track to spotify track
-  - [ ] pick first response?
-  - [ ] deal with errors or no-resp
+- [-] map from last.fm track to spotify track
+  - [X] pick first response?
+  - [X] deal with errors or no-resp
+  - [ ] add to commandline
   - [ ] add progress bar
     - https://github.com/ctongfei/progressbar
+
+- [ ] create lastfm playlist
+  - [ ] from isrcs
+  - [ ] from file?
 
 - [ ] config/authentication errors better?
   - [ ] auth errors

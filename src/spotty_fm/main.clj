@@ -19,6 +19,12 @@
                            "&client_id=" (:clientid (:spotify config))
                            "&scope=playlist-modify-private"))
 
+
+(defn lastfm-to-spotify [token simple-track]
+  (spotify/search-track
+   token (str (:artist simple-track) " " (:title simple-track))))
+
+
 (defn -main [arg & args]
 
   (println
@@ -36,5 +42,12 @@
                                     token (:access_token (spotify/fetch-client-auth-token
                                                           (:clientid (:spotify config))
                                                           (:secret (:spotify config))))]
-                                    
-                                    (spotify/search-tracks token term))))))
+                                
+                                (spotify/search-tracks token term))
+
+      "spotify-search-track" (let [term (first args)
+                                   token (:access_token (spotify/fetch-client-auth-token
+                                                         (:clientid (:spotify config))
+                                                         (:secret (:spotify config))))]
+                               
+                               (spotify/search-track token term))))))
