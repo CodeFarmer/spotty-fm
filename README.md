@@ -60,7 +60,7 @@ Reusing spotify authentication token using environment variable:
 $ lein run spotify-auth-token
 "BQAIpqoi83ubm8xkhDT0gqWzaGI7eaXjP_v4Q3QOcz5_g3TllIplXTECxYmHjY1wRzBoc3z492ES6kNa0So"
 
-$ $ SPOTIFY_AUTH_TOKEN=BQAIpqoi83ubm8xkhDT0gqWzaGI7eaXjP_v4Q3QOcz5_g3TllIplXTECxYmHjY1wRzBoc3z492ES6kNa0So lein run spotify-search-track "Sonic Youth Unwind"
+$ SPOTIFY_AUTH_TOKEN=BQAIpqoi83ubm8xkhDT0gqWzaGI7eaXjP_v4Q3QOcz5_g3TllIplXTECxYmHjY1wRzBoc3z492ES6kNa0So lein run spotify-search-track "Sonic Youth Unwind"
 {"title":"Unwind","artist":"Sonic Youth","isrc":"USGF19582505","spotify-id":"2i9Ga5iAjizEYUFXTHPOKv"}
 
 
