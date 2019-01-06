@@ -15,9 +15,17 @@
 - [-] map from last.fm track to spotify track
   - [X] pick first response?
   - [X] deal with errors or no-resp
-  - [ ] add to commandline
+  - [X] add to commandline
   - [ ] add progress bar
     - https://github.com/ctongfei/progressbar
+
+- [ ] find out why "Adorable Homeboy" works in the search bar but not in the track search
+  - Also why does www.spotify.com think I'm in Sweden and are these things related?
+  - the app works fine...
+  - my profile even lists GB
+  - developer dashboard hase me requesting from sweden and US as well
+
+- [ ] Build offline database of mappings that don't work using the default feeling-lucky search
 
 - [ ] create lastfm playlist
   - [ ] from isrcs

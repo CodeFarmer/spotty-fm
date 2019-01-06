@@ -6,6 +6,8 @@
             [spotty-fm.spotify :as spotify]
             [spotty-fm.core :refer [config]]
             [org.httpkit.server :as server])
+
+  (:import java.io.InputStreamReader)
   
   (:gen-class))
 
@@ -50,4 +52,11 @@
                                                          (:clientid (:spotify config))
                                                          (:secret (:spotify config))))]
                                
-                               (spotify/search-track token term))))))
+                               (spotify/search-track token term))
+
+      ;; output a list of pairs; the first item is the lastfm track and the second is the spotify track (or null)
+      "lastfm-and-spotify" (let [lastfm-tracks (json/read (InputStreamReader. System/in) :key-fn keyword)
+                                token (:access_token (spotify/fetch-client-auth-token
+                                                         (:clientid (:spotify config))
+                                                         (:secret (:spotify config))))]
+                            (map #(vector % (lastfm-to-spotify token %)) lastfm-tracks))))))

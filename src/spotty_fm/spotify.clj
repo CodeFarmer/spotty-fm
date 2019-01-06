@@ -36,5 +36,6 @@
   (if-let [resp (-search-tracks token q)]
     (map simple-track (get-in resp [:tracks :items]))))
 
+;; NOTE you can do (search-track t "isrc:FR6P11500950")
 (defn search-track [token q]
   (first (search-tracks token q)))
