@@ -25,6 +25,11 @@
   - my profile even lists GB
   - developer dashboard hase me requesting from sweden and US as well
 
+- [X] add commandline lookup of track from spotify-id
+  - why is this useful?
+    - do we need to do this at all or can we just use the ID directly in the offline DB
+    - at least do it for a sanity check
+
 - [ ] Build offline database of mappings that don't work using the default feeling-lucky search
 
 - [-] create lastfm playlist

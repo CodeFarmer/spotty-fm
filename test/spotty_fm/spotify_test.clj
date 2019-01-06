@@ -49,6 +49,17 @@
         (is (empty? result) "Search should return an empty list")))))
 
 
+(deftest test-get-track-call
+
+  (testing "Connecting to the live Spotify service, track retrieval should work"
+    (let [t (:access_token (fetch-client-auth-token (:clientid (:spotify config))
+                                                    (:secret (:spotify config))))
+          spotify-id "1V7mHn6zEEUpgysBYxiW9r"
+          resp (-get-track t spotify-id)]
+
+      (is (= "2 Atoms In A Molecule" (:name resp)) "The search response should contain a name field")
+      (is (= spotify-id (:id resp)) "The returned track should have the same ID as passed in the requed"))))
+
 (deftest test-simple-track
 
   (let [spotify-track {:disc_number 1,

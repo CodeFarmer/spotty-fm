@@ -59,4 +59,11 @@
                                 token (:access_token (spotify/fetch-client-auth-token
                                                          (:clientid (:spotify config))
                                                          (:secret (:spotify config))))]
-                            (map #(vector % (lastfm-to-spotify token %)) lastfm-tracks))))))
+                             (map #(vector % (lastfm-to-spotify token %)) lastfm-tracks))
+
+      "spotify-get-track" (let [id (first args)
+                                token (:access_token (spotify/fetch-client-auth-token
+                                                      (:clientid (:spotify config))
+                                                      (:secret (:spotify config))))]
+                            
+                               (spotify/get-track token id))))))

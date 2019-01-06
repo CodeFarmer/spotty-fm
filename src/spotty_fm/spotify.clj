@@ -40,3 +40,13 @@
 ;; NOTE you can do (search-track t "isrc:FR6P11500950")
 (defn search-track [token q]
   (first (search-tracks token q)))
+
+
+(defn -get-track [token id]
+  (let [{:keys [status headers body error] :as resp}
+        @(http/get (str "https://api.spotify.com/v1/tracks/" id)
+                   {:headers { "Authorization" (str "Bearer " token)}})]
+    (json/read-str body :key-fn keyword)))
+
+(defn get-track [token id]
+  (simple-track (-get-track token id)))
