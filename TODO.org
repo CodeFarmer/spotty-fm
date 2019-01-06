@@ -19,6 +19,9 @@
   - [ ] add progress bar
     - https://github.com/ctongfei/progressbar
 
+- [X] add ability to short circuit auth calls with environment var
+  - also try stubbing out env in unit test, some kind of dynamic rebind?
+
 - [ ] find out why "Adorable Homeboy" works in the search bar but not in the track search
   - Also why does www.spotify.com think I'm in Sweden and are these things related?
   - the app works fine...

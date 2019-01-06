@@ -12,12 +12,17 @@
   (str "Basic "  (encode-base64 (str clientid \: secret))))
 
 
-(defn fetch-client-auth-token [clientid secret]
+(defn -fetch-client-auth-token [clientid secret]
   (let [{:keys [status headers body error] :as resp}
         @(http/post "https://accounts.spotify.com/api/token" {:headers { "Authorization" (basic-auth-header clientid secret)}
                                                               :form-params { :grant_type "client_credentials"}})]
     (json/read-str body :key-fn keyword)))
-  
+
+(defn fetch-client-auth-token [clientid secret]
+  (if-let [override (env :spotify-auth-token)]
+    override
+    (:access_token (-fetch-client-auth-token clientid secret))))
+
 
 (defn simple-track [spotify-track]
   {:title (:name spotify-track)

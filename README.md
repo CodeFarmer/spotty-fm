@@ -10,11 +10,11 @@ file in the root directory.
 #### last.fm
 
 ```bash
-lein run lastfm-user-tag CodeFarmer "greatest songs of all time"
+$ lein run lastfm-user-tag CodeFarmer "greatest songs of all time"
 ```
 
 ```bash
-lein run lastfm-user-loved CodeFarmer
+$ lein run lastfm-user-loved CodeFarmer
 ```
 
 #### spotify
@@ -22,19 +22,19 @@ lein run lastfm-user-loved CodeFarmer
 Track search by text:
 
 ```bash
-lein run spotify-search-tracks "Christine and the Queens Tilted"
+$ lein run spotify-search-tracks "Christine and the Queens Tilted"
 ```
 
 "I'm feeling lucky":
 
 ```bash
-lein run spotify-search-track "Christine and the Queens Tilted"
+$ lein run spotify-search-track "Christine and the Queens Tilted"
 ```
 
 NOTE: Getting alist of Spotify isrc fields:
 
 ```
-lein run spotify-search-tracks "Christine and the Queens Tilted" | jq 'map(.isrc)'
+$ lein run spotify-search-tracks "Christine and the Queens Tilted" | jq 'map(.isrc)'
 [
   "FR6P11500950",
   "FR6P11501170",
@@ -53,13 +53,24 @@ lein run spotify-search-tracks "Christine and the Queens Tilted" | jq 'map(.isrc
 ]
 ```
 
+Reusing spotify authentication token using environment variable:
+
+```bash
+
+$ lein run spotify-auth-token
+"BQAIpqoi83ubm8xkhDT0gqWzaGI7eaXjP_v4Q3QOcz5_g3TllIplXTECxYmHjY1wRzBoc3z492ES6kNa0So"
+
+$ $ SPOTIFY_AUTH_TOKEN=BQAIpqoi83ubm8xkhDT0gqWzaGI7eaXjP_v4Q3QOcz5_g3TllIplXTECxYmHjY1wRzBoc3z492ES6kNa0So lein run spotify-search-track "Sonic Youth Unwind"
+{"title":"Unwind","artist":"Sonic Youth","isrc":"USGF19582505","spotify-id":"2i9Ga5iAjizEYUFXTHPOKv"}
+
+
 #### lastfm to spotify
 
 Convert a lastfm tag to a list of spotify track ISRCs:
 
 ```bash
 
-lein run lastfm-user-tag CodeFarmer "ohrwurm" | lein run lastfm-and-spotify | jq 'map(.[1].isrc)'
+$ lein run lastfm-user-tag CodeFarmer "ohrwurm" | lein run lastfm-and-spotify | jq 'map(.[1].isrc)'
 [
   "NZUM71200031",
   "USNO11700271",

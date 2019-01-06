@@ -7,8 +7,8 @@
 
 (deftest test-lastfm-to-spotify
 
-  (let [t (:access_token (spotify/fetch-client-auth-token (:clientid (:spotify config))
-                                                          (:secret (:spotify config))))]
+  (let [t (spotify/fetch-client-auth-token (:clientid (:spotify config))
+                                           (:secret (:spotify config)))]
     (testing "Known lastfm track to known spotify track"
       
       (let [spotify-track (lastfm-to-spotify t {:title "Any Day Now",
