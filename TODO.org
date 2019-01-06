@@ -27,8 +27,9 @@
 
 - [ ] Build offline database of mappings that don't work using the default feeling-lucky search
 
-- [ ] create lastfm playlist
-  - [ ] from isrcs
+- [-] create lastfm playlist
+  - [X] wait actually how do you get a spotify ID?
+  - [ ] from ids
   - [ ] from file?
 
 - [ ] config/authentication errors better?

@@ -19,10 +19,11 @@
     (json/read-str body :key-fn keyword)))
   
 
-(defn simple-track [lastfm-track]
-  {:title (:name lastfm-track)
-   :artist (:name  (first  (:artists lastfm-track))) ; hmm
-   :isrc (:isrc (:external_ids lastfm-track))})
+(defn simple-track [spotify-track]
+  {:title (:name spotify-track)
+   :artist (:name  (first  (:artists spotify-track))) ; hmm
+   :isrc (:isrc (:external_ids spotify-track))
+   :spotify-id (:id spotify-track)})
 
 ;; (first (:items (:tracks (search-tracks t "Sonic Youth Becuz)))
 (defn -search-tracks [token q]

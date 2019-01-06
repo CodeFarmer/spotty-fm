@@ -47,3 +47,42 @@
 
         (is (seq? result) "Result should be a sequence")
         (is (empty? result) "Search should return an empty list")))))
+
+
+(deftest test-simple-track
+
+  (let [spotify-track {:disc_number 1,
+                       :popularity 22,
+                       :duration_ms 252866,
+                       :name "Skip Tracer",
+                       :explicit false,
+                       :type "track",
+                       :external_urls {:spotify "https://open.spotify.com/track/7p5iMpBmTU04vIrjAk0mJc"},
+                       :external_ids {:isrc "USGF19582510"},
+                       :preview_url nil,
+                       :track_number 10,
+                       :is_local false,
+                       :id "7p5iMpBmTU04vIrjAk0mJc",
+                       :available_markets ["AD" "AR" "AT" "AU" "BE" "BG" "BO" "BR" "CA" "CH" "CL" "CO" "CR" "CY" "CZ" "DE" "DK" "DO" "EC" "EE" "ES" "FI" "FR" "GB" "GR" "GT" "HK" "HN" "HU" "ID" "IE" "IL" "IS" "IT" "JP" "LI" "LT" "LU" "LV" "MC" "MT" "MX" "MY" "NI" "NL" "NO" "NZ" "PA" "PE" "PH" "PL" "PT" "PY" "RO" "SE" "SG" "SK" "SV" "TH" "TR" "TW" "US" "UY" "VN" "ZA"],
+                       :uri "spotify:track:7p5iMpBmTU04vIrjAk0mJc",
+                       :artists [{:external_urls {:spotify "https://open.spotify.com/artist/5UqTO8smerMvxHYA5xsXb6"}, :href "https://api.spotify.com/v1/artists/5UqTO8smerMvxHYA5xsXb6", :id "5UqTO8smerMvxHYA5xsXb6", :name "Sonic Youth", :type "artist", :uri "spotify:artist:5UqTO8smerMvxHYA5xsXb6"}],
+                       :album {:album_type "album",
+                               :release_date "1995-01-01",
+                               :images [{:height 640, :url "https://i.scdn.co/image/83611f8684d6f39560418eff2f53cc9547af20fd", :width 640}
+                                        {:height 300, :url "https://i.scdn.co/image/2c1e5f0231d955d62439ba562eb211e7614a2745", :width 300}
+                                        {:height 64, :url "https://i.scdn.co/image/9a1bb01b1fae00bff7fb8bdc0086b24237d62e68", :width 64}],
+                               :name "Washing Machine",
+                               :release_date_precision "day",
+                               :type "album",
+                               :external_urls {:spotify "https://open.spotify.com/album/0VskfMaczM0MNAlqqvokTC"},
+                               :id "0VskfMaczM0MNAlqqvokTC",
+                               :available_markets ["AD" "AR" "AT" "AU" "BE" "BG" "BO" "BR" "CA" "CH" "CL" "CO" "CR" "CY" "CZ" "DE" "DK" "DO" "EC" "EE" "ES" "FI" "FR" "GB" "GR" "GT" "HK" "HN" "HU" "ID" "IE" "IL" "IS" "IT" "JP" "LI" "LT" "LU" "LV" "MC" "MT" "MX" "MY" "NI" "NL" "NO" "NZ" "PA" "PE" "PH" "PL" "PT" "PY" "RO" "SE" "SG" "SK" "SV" "TH" "TR" "TW" "US" "UY" "VN" "ZA"],
+                               :uri "spotify:album:0VskfMaczM0MNAlqqvokTC",
+                               :artists [{:external_urls {:spotify "https://open.spotify.com/artist/5UqTO8smerMvxHYA5xsXb6"}, :href "https://api.spotify.com/v1/artists/5UqTO8smerMvxHYA5xsXb6", :id "5UqTO8smerMvxHYA5xsXb6", :name "Sonic Youth", :type "artist", :uri "spotify:artist:5UqTO8smerMvxHYA5xsXb6"}],
+                               :total_tracks 11,
+                               :href "https://api.spotify.com/v1/albums/0VskfMaczM0MNAlqqvokTC"},
+                       :href "https://api.spotify.com/v1/tracks/7p5iMpBmTU04vIrjAk0mJc"}
+
+        st (simple-track spotify-track)]
+
+    (is (= "7p5iMpBmTU04vIrjAk0mJc" (:spotify-id st)) "simple-track should extract the correct spotify-id from the track response object")))

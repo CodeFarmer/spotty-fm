@@ -17,7 +17,8 @@
         
         (is (= spotify-track {:title "Any Day Now"
                               :artist "Elbow"
-                              :isrc "GBBLK0000224"})
+                              :isrc "GBBLK0000224"
+                              :spotify-id "59qdWok2u5ItLGEVf008kD"})
             "Known spotify track should be returned for known lastfm track")))))
 
 
