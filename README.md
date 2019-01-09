@@ -31,6 +31,13 @@ $ lein run spotify-search-tracks "Christine and the Queens Tilted"
 $ lein run spotify-search-track "Christine and the Queens Tilted"
 ```
 
+Track search by isrc:
+
+```bash
+$ lein run spotify-search-track "isrc:USQE91000035"
+{"title":"Rill Rill","artist":"Sleigh Bells","isrc":"USQE91000035","spotify-id":"3GbjOImkNo5nFT2GQxVr11"}
+```
+
 NOTE: Getting alist of Spotify isrc fields:
 
 ```
@@ -65,6 +72,55 @@ $ SPOTIFY_AUTH_TOKEN=BQAIpqoi83ubm8xkhDT0gqWzaGI7eaXjP_v4Q3QOcz5_g3TllIplXTECxYm
 ```
 
 #### lastfm to spotify
+
+Given a list of lastfm simple-tracks, return them paired with the
+results of spotify track searches:
+
+```bash
+$ lein run lastfm-user-tag CodeFarmer "ohrwurm" | lein run lastfm-and-spotify | jq
+[
+  [
+    {
+      "title": "Royals",
+      "artist": "Lorde",
+      "mbid": "6f1b86fd-279a-4672-9161-fefb7d000db1"
+    },
+    {
+      "title": "Royals",
+      "artist": "Lorde",
+      "isrc": "NZUM71200031",
+      "spotify-id": "2dLLR6qlu5UJ5gk0dKz0h3"
+    }
+  ],
+  [
+    {
+      "title": "Bike Dream",
+      "artist": "Rostam",
+      "mbid": ""
+    },
+    {
+      "title": "Bike Dream",
+      "artist": "Rostam",
+      "isrc": "USNO11700271",
+      "spotify-id": "1acb8u70kClk6NjITaZyuG"
+    }
+  ],
+  [
+    {
+      "title": "Rill Rill",
+      "artist": "Sleigh Bells",
+      "mbid": "e55dff8b-16a4-45cf-b9ec-0cd7d01e4e8b"
+    },
+    {
+      "title": "Rill Rill",
+      "artist": "Sleigh Bells",
+      "isrc": "USQE91000035",
+      "spotify-id": "3GbjOImkNo5nFT2GQxVr11"
+    }
+  ]
+  // ...
+]
+```
 
 Convert a lastfm tag to a list of spotify track ISRCs:
 
