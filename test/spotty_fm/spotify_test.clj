@@ -4,6 +4,11 @@
             [spotty-fm.core :refer [config]]))
 
 
+(defn client-auth-token []
+  (fetch-client-auth-token (:clientid (:spotify config))
+                           (:secret (:spotify config))))
+
+
 (deftest test-client-auth-call
 
   (testing "Connecting to the live Spotify service, the clientID and secret should be accepted and a token returned"
@@ -31,8 +36,7 @@
 (deftest test-search-tracks-call
 
   (testing "Connecting to the live Spotify service, track search should work"
-    (let [t (fetch-client-auth-token (:clientid (:spotify config))
-                                     (:secret (:spotify config)))
+    (let [t (client-auth-token)
           resp (-search-tracks t "DJ Shadow Building Steam With A Grain Of Salt")]
 
       (is (contains? resp :tracks) "The search response should contain a tracks field")
@@ -41,8 +45,7 @@
 
 (deftest test-search-tracks
 
-  (let [t (fetch-client-auth-token (:clientid (:spotify config))
-                                   (:secret (:spotify config)))]
+  (let [t (client-auth-token)]
     
     (testing "Wrapped track search call success"
 
@@ -66,8 +69,7 @@
 (deftest test-get-track-call
 
   (testing "Connecting to the live Spotify service, track retrieval should work"
-    (let [t (fetch-client-auth-token (:clientid (:spotify config))
-                                     (:secret (:spotify config)))
+    (let [t (client-auth-token)
           spotify-id "1V7mHn6zEEUpgysBYxiW9r"
           resp (-get-track t spotify-id)]
 
@@ -111,3 +113,16 @@
         st (simple-track spotify-track)]
 
     (is (= "7p5iMpBmTU04vIrjAk0mJc" (:spotify-id st)) "simple-track should extract the correct spotify-id from the track response object")))
+
+
+(comment "User authentication requires an HTTP server to be implemented, see https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-flows"
+  (deftest test-get-user
+    (testing "The current user should return data"
+      (let [t (user-auth-token)
+            u (get-current-user t)]
+        (is (not (nil? u)) "Response should not be nil")
+        (is (= {} u) "Returned user should not be empty")))))
+
+(comment "Creating playlists is permanent; consider whether you want this test active all the time"
+  (deftest test-create-playlist
+    (testing "Creating and deleting (unfollowing) a playlist")))

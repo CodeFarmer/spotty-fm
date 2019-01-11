@@ -27,7 +27,25 @@
     - do we need to do this at all or can we just use the ID directly in the offline DB
     - at least do it for a sanity check
 
+- [ ] implement user authorization redirect server that can be run
+  somewhere
+  - [ ] server implementation
+    - [ ] defend against DOS by hashing the state string with the
+      spotify secret
+    - [ ] store things in a configurable cache
+      - size
+      - TTL
+  - [ ] dockerize
+  - [ ] terraform
+    - ECS
+    - HTTPS termination
+  - [ ] consider whether it can be implemented as a lambda and DynamoDB?
+    - this is certainly much cheaper
+
+- [ ] implement user authorization using the server
+
 - [-] create lastfm playlist
+  - this requires user auth, see above
   - [X] wait actually how do you get a spotify ID?
   - [ ] from ids
 

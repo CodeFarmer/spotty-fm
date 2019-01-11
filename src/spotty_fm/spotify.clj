@@ -58,3 +58,9 @@
 
 (defn get-track [token id]
   (simple-track (-get-track token id)))
+
+(defn get-current-user [token]
+  (let [{:keys [status headers body error] :as resp}
+        @(http/get "https://api.spotify.com/v1/me"
+                   {:headers (bearer-auth-header token)})]
+    (json/read-str body :key-fn keyword)))
