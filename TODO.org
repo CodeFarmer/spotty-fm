@@ -27,22 +27,17 @@
     - do we need to do this at all or can we just use the ID directly in the offline DB
     - at least do it for a sanity check
 
-- [ ] implement user authorization redirect server that can be run
+- [X] implement user authorization redirect server that can be run
   somewhere
-  - [ ] server implementation
-    - [ ] defend against DOS by hashing the state string with the
-      spotify secret
-    - [ ] store things in a configurable cache
-      - size
-      - TTL
-  - [ ] dockerize
-  - [ ] terraform
-    - ECS
-    - HTTPS termination
-  - [ ] consider whether it can be implemented as a lambda and DynamoDB?
-    - this is certainly much cheaper
 
-- [ ] implement user authorization using the server
+- [X] Deploy the redirect server somewhere
+
+- [X] implement user authorization using the server
+  - [X] get request flow working
+  - [ ] wrap with nice functions
+    - [ ] string/JSON output
+    - [ ] "prompt user to authenticate" URL
+    - [ ] store refresh token somewhere
 
 - [-] create lastfm playlist
   - this requires user auth, see above
@@ -56,6 +51,7 @@
   - the app works fine...
   - my profile even lists GB
   - developer dashboard has me requesting from sweden and US as well
+  - is this a thing where it will work when I'm authed as a user?
 
 - [ ] Build offline database of mappings that don't work using the default feeling-lucky search
 

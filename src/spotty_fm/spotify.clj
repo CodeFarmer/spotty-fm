@@ -23,6 +23,33 @@
     (:access_token (-fetch-client-auth-token clientid secret))))
 
 
+;; TODO this is just a stub
+;; Maybe just output this URI or load it with a browser?
+;; instead of making the request
+(defn -authorize [client-id state]
+  (let [{:keys [status headers body error] :as resp}
+        @(http/get "https://accounts.spotify.com/authorize" {:query-params {:client_id client-id
+                                   :response_type "code"
+                                   :redirect_uri "https://spotty-auth.gluth.io/authorized"
+                                   :state state}})]
+    resp))
+
+;; TODO this is just a stub
+(defn -retrieve-auth-code [state]
+  (let [{:keys [status headers body error] :as resp}
+        @(http/get (str "https://spotty-auth.gluth.io/token/" state))]
+    body))
+
+(defn -fetch-user-auth-token [client-id secret code]
+    (let [{:keys [status headers body error] :as resp}
+          @(http/post "https://accounts.spotify.com/api/token"
+                      {:headers (basic-auth-header client-id secret)
+                       :form-params {:grant_type "authorization_code"
+                                     :code code
+                                     :redirect_uri "https://spotty-auth.gluth.io/authorized"}})]
+      body))
+
+
 (defn simple-track [spotify-track]
   {:title (:name spotify-track)
    :artist (:name  (first  (:artists spotify-track))) ; hmm
