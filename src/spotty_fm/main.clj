@@ -29,45 +29,44 @@
 
 (defn -main [arg & args]
 
-  (println
-   (json/write-str
 
-    (case arg
+  (let [{:keys [apikey]} (:lastfm config)
+        {:keys [clientid secret authserver]} (:spotify config)]
+    
+    (println
+     
+     (json/write-str
 
-      "lastfm-user-tag" (let [[user tag] args]
-                          (lastfm/user-tagged-tracks (:apikey (:lastfm config)) user tag))
-              
-      "lastfm-user-loved" (let [user (first args)]
-                            (lastfm/user-loved-tracks (:apikey (:lastfm config)) user))
+      (case arg
 
-      "spotify-search-tracks" (let [term (first args)
-                                    token (spotify/fetch-client-auth-token
-                                           (:clientid (:spotify config))
-                                           (:secret (:spotify config)))]
-                                
-                                (spotify/search-tracks token term))
+        "lastfm-user-tag" (let [[user tag] args]
+                            (lastfm/user-tagged-tracks apikey user tag))
+        
+        "lastfm-user-loved" (let [user (first args)]
+                              (lastfm/user-loved-tracks apikey user))
 
-      "spotify-search-track" (let [term (first args)
-                                   token (spotify/fetch-client-auth-token
-                                          (:clientid (:spotify config))
-                                          (:secret (:spotify config)))]
-                               
-                               (spotify/search-track token term))
+        "spotify-search-tracks" (let [term (first args)
+                                      token (spotify/fetch-client-auth-token clientid secret)]
+                                  
+                                  (spotify/search-tracks token term))
 
-      ;; output a list of pairs; the first item is the lastfm track and the second is the spotify track (or null)
-      "lastfm-and-spotify" (let [lastfm-tracks (json/read (InputStreamReader. System/in) :key-fn keyword)
-                                 token (spotify/fetch-client-auth-token
-                                        (:clientid (:spotify config))
-                                        (:secret (:spotify config)))]
-                             (map #(vector % (lastfm-to-spotify token %)) lastfm-tracks))
+        "spotify-search-track" (let [term (first args)
+                                     token (spotify/fetch-client-auth-token clientid secret)]
+                                 
+                                 (spotify/search-track token term))
 
-      "spotify-get-track" (let [id (first args)
-                                token (spotify/fetch-client-auth-token
-                                       (:clientid (:spotify config))
-                                       (:secret (:spotify config)))]
-                            
-                            (spotify/get-track token id))
+        ;; output a list of pairs; the first item is the lastfm track and the second is the spotify track (or null)
+        "lastfm-and-spotify" (let [lastfm-tracks (json/read (InputStreamReader. System/in) :key-fn keyword)
+                                   token (spotify/fetch-client-auth-token clientid secret)]
+                               (map #(vector % (lastfm-to-spotify token %)) lastfm-tracks))
 
-      "spotify-auth-token" (spotify/fetch-client-auth-token
-                                       (:clientid (:spotify config))
-                                       (:secret (:spotify config)))))))
+        "spotify-get-track" (let [id (first args)
+                                  token (spotify/fetch-client-auth-token clientid secret)]
+                              
+                              (spotify/get-track token id))
+
+        "spotify-auth-token" (spotify/fetch-client-auth-token clientid secret)
+
+        "spotify-user-auth" (spotify/user-authorize clientid secret authserver)
+
+        "spotify-current-user" (spotify/get-current-user (spotify/fetch-user-auth-token clientid secret authserver)))))))

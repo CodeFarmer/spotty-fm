@@ -34,10 +34,10 @@
 
 - [X] implement user authorization using the server
   - [X] get request flow working
-  - [ ] wrap with nice functions
-    - [ ] string/JSON output
-    - [ ] "prompt user to authenticate" URL
-    - [ ] store refresh token somewhere
+  - [X] wrap with nice functions
+    - [X] string/JSON output
+    - [X] clojure.java.browse/browse-url
+    - [X] store refresh token somewhere
 
 - [-] create lastfm playlist
   - this requires user auth, see above
@@ -46,12 +46,8 @@
 
 - [ ] refactor main to include command line usage
 
-- [ ] find out why "Adorable Homeboy" works in the search bar but not in the track search
-  - Also why does www.spotify.com think I'm in Sweden and are these things related?
-  - the app works fine...
-  - my profile even lists GB
-  - developer dashboard has me requesting from sweden and US as well
-  - is this a thing where it will work when I'm authed as a user?
+- [X] find out why "Adorable Homeboy" works in the search bar but not in the track search
+  - It turns out some tracks won't apprae
 
 - [ ] Build offline database of mappings that don't work using the default feeling-lucky search
 

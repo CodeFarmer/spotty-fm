@@ -7,6 +7,11 @@ I'll make this better configurable, but for now you need your own
 Spotify and last.fm access credentials in the template config.json
 file in the root directory.
 
+If you want to do anything requiring user authorization, you'll need
+to configure 'authserver' in the spotify section of the JSON file to
+point to a running instance of
+[spotty-auth-server](http://github.com/CodeFarmer/spotty-auth-server).
+
 #### last.fm
 
 ```bash
@@ -161,3 +166,39 @@ $ lein run lastfm-user-tag CodeFarmer "ohrwurm" | lein run lastfm-and-spotify | 
 ]
 
 ```
+
+##### User authorization
+
+```bash
+$ lein run spotify-user-auth | jq
+{
+  "access_token": "A_REALLY_LONG_ACESS_TOKEN",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "refresh_token": "A_REALLY_LONG_REFRESH_TOKEN",
+  "scope": ""
+}
+```
+
+A browser window appears and user authorization happens on Spotify
+
+```bash
+$ SPOTIFY_AUTH_TOKEN=A_REALLY_LONG_ACCESS_TOKEN lein run spotify-current-user | jq
+{
+  "display_name": "codefarmer",
+  "external_urls": {
+    "spotify": "https://open.spotify.com/user/codefarmer"
+  },
+  "followers": {
+    "href": null,
+    "total": 1
+  },
+  "href": "https://api.spotify.com/v1/users/codefarmer",
+  "id": "codefarmer",
+  "images": [],
+  "type": "user",
+  "uri": "spotify:user:codefarmer"
+}
+```
+
+If you omit the SPOTIFY_AUTH_TOKEN variable setting, the user auth step happens automatically.

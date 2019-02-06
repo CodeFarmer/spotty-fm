@@ -1,15 +1,16 @@
 {
     
     "lastfm": {
-	"name": "spotty-fm",
-	"apikey": "YOUR_LASTFM_API_KEY",
-	"secret": "YOUR_LASTFM_SECRET",
+	"name":    "spotty-fm",
+	"apikey":  "YOUR_LASTFM_API_KEY",
+	"secret":  "YOUR_LASTFM_SECRET",
 	"account": "YOUR_LASTFM_ACCOUNT"
     },
 
     "spotify": {
-	"clientid": "YOUR_SPOTIFY_CLIENT_ID",
-	"secret":   "YOUR_SPOTIFY_SECRET"
+	"clientid":   "YOUR_SPOTIFY_CLIENT_ID",
+	"secret":     "YOUR_SPOTIFY_SECRET"
+	"authserver": "https://example.com"
     }
 
 }

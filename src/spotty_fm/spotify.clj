@@ -1,15 +1,55 @@
 (ns spotty-fm.spotify
 
-  (:require [org.httpkit.client :as http]
-            [clojure.data.json :as json]
-            [environ.core :refer [env]])
-  (:import java.util.Base64))
+  (:require [clojure.data.json :as json]
+            [clojure.java.browse :refer [browse-url]]
+            [clojure.string :as string]
+            [clojure.walk :refer [prewalk]]
+            
+            [environ.core :refer [env]]
+            [org.httpkit.client :as http])
+  
+  (:import java.util.Base64
+           java.net.URLEncoder))
+
+
+;; Stolen from the source code of http-kit, which could just have made
+;; it public but Java programmers gonna Java, even in Clojure.
+
+(defn url-encode [s] (URLEncoder/encode (str s) "utf8"))
 
 (defn encode-base64 [to-encode]
   (.encodeToString (Base64/getEncoder) (.getBytes to-encode)))
 
+(defn nested-param [params]
+  (prewalk (fn [d]
+             (if (and (vector? d) (map? (second d)))
+               (let [[fk m] d]
+                 (reduce (fn [m [sk v]]
+                           (assoc m (str (name fk) \[ (name sk) \]) v))
+                         {} m))
+               d))
+           params))
+
+(defn query-string
+  "Returns URL-encoded query string for given params map."
+  [m]
+  (let [m (nested-param m)
+        param (fn [k v]  (str (url-encode (name k)) "=" (url-encode v)))
+        join  (fn [strs] (string/join "&" strs))]
+    (join (for [[k v] m] (if (sequential? v)
+                           (join (map (partial param k) (or (seq v) [""])))
+                           (param k v))))))
+
+;; ^ end theft from http-kit
+
 (defn basic-auth-header [clientid secret]
   {"Authorization" (str "Basic "  (encode-base64 (str clientid \: secret)))})
+
+
+(defn bearer-auth-header [token]
+  { "Authorization" (str "Bearer " token)})
+
+;; API client authorization
 
 (defn -fetch-client-auth-token [clientid secret]
   (let [{:keys [status headers body error] :as resp}
@@ -22,43 +62,50 @@
     override
     (:access_token (-fetch-client-auth-token clientid secret))))
 
+;; User authorization
 
-;; TODO this is just a stub
-;; Maybe just output this URI or load it with a browser?
-;; instead of making the request
-(defn -authorize [client-id state]
-  (let [{:keys [status headers body error] :as resp}
-        @(http/get "https://accounts.spotify.com/authorize" {:query-params {:client_id client-id
-                                   :response_type "code"
-                                   :redirect_uri "https://spotty-auth.gluth.io/authorized"
-                                   :state state}})]
-    resp))
+(defn rand-str [len]
+  (string/join (repeatedly len #(char (+ (rand 26) 65)))))
 
-;; TODO this is just a stub
-(defn -retrieve-auth-code [state]
+(defn -user-authorize! [client-id auth-server state]
+  (browse-url (str "https://accounts.spotify.com/authorize?" (query-string {:client_id client-id
+                                                                            :response_type "code"
+                                                                            :redirect_uri (str auth-server "/authorized")
+                                                                            :state state}))))
+
+(defn -retrieve-auth-code [auth-server state]
   (let [{:keys [status headers body error] :as resp}
-        @(http/get (str "https://spotty-auth.gluth.io/token/" state))]
+        @(http/get (str auth-server "/token/" state))]
     body))
 
-(defn -fetch-user-auth-token [client-id secret code]
+(defn -fetch-user-auth [client-id secret auth-server code]
     (let [{:keys [status headers body error] :as resp}
           @(http/post "https://accounts.spotify.com/api/token"
                       {:headers (basic-auth-header client-id secret)
                        :form-params {:grant_type "authorization_code"
                                      :code code
-                                     :redirect_uri "https://spotty-auth.gluth.io/authorized"}})]
-      body))
+                                     :redirect_uri (str auth-server "/authorized")}})]
+      
+      (json/read-str body :key-fn keyword)))
 
+;; TODO add scope arg
+(defn user-authorize [client-id secret auth-server]
+  (let [state (rand-str 64)]
+    (-user-authorize! client-id auth-server state)
+    (-fetch-user-auth client-id secret auth-server (-retrieve-auth-code auth-server state))))
+
+(defn fetch-user-auth-token [client-id secret auth-server]
+  (if-let [override (env :spotify-auth-token)]
+    override
+    (:access_token (user-authorize client-id secret auth-server))))
+
+;; Tracks
 
 (defn simple-track [spotify-track]
   {:title (:name spotify-track)
    :artist (:name  (first  (:artists spotify-track))) ; hmm
    :isrc (:isrc (:external_ids spotify-track))
    :spotify-id (:id spotify-track)})
-
-
-(defn bearer-auth-header [token]
-  { "Authorization" (str "Bearer " token)})
 
 ;; (first (:items (:tracks (search-tracks t "Sonic Youth Becuz)))
 (defn -search-tracks [token q]
@@ -84,7 +131,9 @@
     (json/read-str body :key-fn keyword)))
 
 (defn get-track [token id]
+
   (simple-track (-get-track token id)))
+
 
 (defn get-current-user [token]
   (let [{:keys [status headers body error] :as resp}
