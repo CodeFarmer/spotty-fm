@@ -76,6 +76,92 @@ $ SPOTIFY_AUTH_TOKEN=BQAIpqoi83ubm8xkhDT0gqWzaGI7eaXjP_v4Q3QOcz5_g3TllIplXTECxYm
 {"title":"Unwind","artist":"Sonic Youth","isrc":"USGF19582505","spotify-id":"2i9Ga5iAjizEYUFXTHPOKv"}
 ```
 
+##### User authorization
+
+```bash
+$ lein run spotify-user-auth | jq
+{
+  "access_token": "A_REALLY_LONG_ACESS_TOKEN",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "refresh_token": "A_REALLY_LONG_REFRESH_TOKEN",
+  "scope": ""
+}
+```
+
+A browser window appears and user authorization happens on Spotify
+
+```bash
+$ SPOTIFY_AUTH_TOKEN=A_REALLY_LONG_ACCESS_TOKEN lein run spotify-current-user | jq
+{
+  "display_name": "codefarmer",
+  "external_urls": {
+    "spotify": "https://open.spotify.com/user/codefarmer"
+  },
+  "followers": {
+    "href": null,
+    "total": 1
+  },
+  "href": "https://api.spotify.com/v1/users/codefarmer",
+  "id": "codefarmer",
+  "images": [],
+  "type": "user",
+  "uri": "spotify:user:codefarmer"
+}
+```
+
+If you omit the SPOTIFY_AUTH_TOKEN variable setting, the user auth step happens automatically.
+
+##### playlists
+
+```bash
+
+SPOTIFY_AUTH_TOKEN=A_REALLY_LONG_ACCESS_TOKEN lein run spotify-current-user-playlists | jq
+
+{
+  "href": "https://api.spotify.com/v1/users/codefarmer/playlists?offset=0&limit=20",
+  "items": [
+    {
+      "images": [
+        {
+          "height": 640,
+          "url": "https://mosaic.scdn.co/640/23c496a83b3d5ad1bc2873c7bec793dcb12b45c42b59708cd72885507fd342cfe71df55e78b7b218467b198f28674ab3136278d0d79ca6010a6a104794c5cf08ea9783b4b8373e3def893991eb80dcad",
+          "width": 640
+        },
+        {
+          "height": 300,
+          "url": "https://mosaic.scdn.co/300/23c496a83b3d5ad1bc2873c7bec793dcb12b45c42b59708cd72885507fd342cfe71df55e78b7b218467b198f28674ab3136278d0d79ca6010a6a104794c5cf08ea9783b4b8373e3def893991eb80dcad",
+          "width": 300
+        },
+		
+		// ... much more data, but no tracks
+
+```
+
+Retrieve playlsits by id:
+
+```bash
+
+SPOTIFY_AUTH_TOKEN=BQDdz9O_E3vro3uT9kxKptdbB98SqRb3YtyaZXevq2YvsCsityOBVpPPmTxa0XV7JK6aq6WhMwbFuOENrgTXbOKz-bba2KTzTk6TUl0Ft-LsOTwiVExdQEXNPUG9QvDiIVC3gE6gklxMqlL6N9lG lein run spotify-get-playlist 6lBLh2ovTqIU1Cxd6zFgU9 | jq
+
+{
+  "description": "",
+  "images": [
+    {
+      "height": 640,
+      "url": "https://mosaic.scdn.co/640/23c496a83b3d5ad1bc2873c7bec793dcb12b45c42b59708cd72885507fd342cfe71df55e78b7b218467b198f28674ab3136278d0d79ca6010a6a104794c5cf08ea9783b4b8373e3def893991eb80dcad",
+      "width": 640
+    },
+    {
+      "height": 300,
+      "url": "https://mosaic.scdn.co/300/23c496a83b3d5ad1bc2873c7bec793dcb12b45c42b59708cd72885507fd342cfe71df55e78b7b218467b198f28674ab3136278d0d79ca6010a6a104794c5cf08ea9783b4b8373e3def893991eb80dcad",
+      "width": 300
+    },
+	
+	// ... much more data ensues, including tracks
+
+```
+
 #### lastfm to spotify
 
 Given a list of lastfm simple-tracks, return them paired with the
@@ -167,38 +253,4 @@ $ lein run lastfm-user-tag CodeFarmer "ohrwurm" | lein run lastfm-and-spotify | 
 
 ```
 
-##### User authorization
 
-```bash
-$ lein run spotify-user-auth | jq
-{
-  "access_token": "A_REALLY_LONG_ACESS_TOKEN",
-  "token_type": "Bearer",
-  "expires_in": 3600,
-  "refresh_token": "A_REALLY_LONG_REFRESH_TOKEN",
-  "scope": ""
-}
-```
-
-A browser window appears and user authorization happens on Spotify
-
-```bash
-$ SPOTIFY_AUTH_TOKEN=A_REALLY_LONG_ACCESS_TOKEN lein run spotify-current-user | jq
-{
-  "display_name": "codefarmer",
-  "external_urls": {
-    "spotify": "https://open.spotify.com/user/codefarmer"
-  },
-  "followers": {
-    "href": null,
-    "total": 1
-  },
-  "href": "https://api.spotify.com/v1/users/codefarmer",
-  "id": "codefarmer",
-  "images": [],
-  "type": "user",
-  "uri": "spotify:user:codefarmer"
-}
-```
-
-If you omit the SPOTIFY_AUTH_TOKEN variable setting, the user auth step happens automatically.

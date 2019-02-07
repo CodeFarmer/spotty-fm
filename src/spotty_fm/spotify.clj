@@ -153,3 +153,21 @@
         @(http/get "https://api.spotify.com/v1/me"
                    {:headers (bearer-auth-header token)})]
     (json/read-str body :key-fn keyword)))
+
+;; Playlists
+
+(defn get-current-user-playlists
+  "Retrieve all the playlists for the user associated with valid user authorization token"
+  [token]
+  (let [{:keys [status headers body error] :as resp}
+        @(http/get "https://api.spotify.com/v1/me/playlists"
+                   {:headers (bearer-auth-header token)})]
+    (json/read-str body :key-fn keyword)))
+
+(defn get-playlist
+  "Retrieve a playlist to which the user associated with the auth token has access"
+  [token playlist-id]
+  (let [{:keys [status headers body error] :as resp}
+        @(http/get (str "https://api.spotify.com/v1/playlists/" playlist-id)
+                   {:headers (bearer-auth-header token)})]
+    (json/read-str body :key-fn keyword)))

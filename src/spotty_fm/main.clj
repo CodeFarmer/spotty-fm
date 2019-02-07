@@ -69,4 +69,13 @@
 
         "spotify-user-auth" (spotify/user-authorize clientid secret authserver)
 
-        "spotify-current-user" (spotify/get-current-user (spotify/fetch-user-auth-token clientid secret authserver)))))))
+        "spotify-current-user" (spotify/get-current-user
+                                (spotify/fetch-user-auth-token clientid secret authserver))
+        
+        "spotify-current-user-playlists" (spotify/get-current-user-playlists
+                                          (spotify/fetch-user-auth-token clientid secret authserver))
+
+        "spotify-get-playlist" (let [playlist-id (first args)]
+                                 (spotify/get-playlist
+                                  (spotify/fetch-user-auth-token clientid secret authserver)
+                                  playlist-id)))))))
