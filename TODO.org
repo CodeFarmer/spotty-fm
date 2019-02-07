@@ -39,6 +39,8 @@
     - [X] clojure.java.browse/browse-url
     - [X] store refresh token somewhere
 
+- [ ] Add non-default scopes to user auth requests
+
 - [-] create lastfm playlist
   - this requires user auth, see above
   - [X] wait actually how do you get a spotify ID?
