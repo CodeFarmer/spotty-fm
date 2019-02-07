@@ -40,49 +40,54 @@
 
       (case arg
 
-        "lastfm-user-tag" (let [[user tag] args]
-                            (lastfm/user-tagged-tracks apikey user tag))
+        "lastfm-user-tag"
+        (let [[user tag] args] (lastfm/user-tagged-tracks apikey user tag))
         
-        "lastfm-user-loved" (let [user (first args)]
-                              (lastfm/user-loved-tracks apikey user))
+        "lastfm-user-loved"
+        (let [user (first args)] (lastfm/user-loved-tracks apikey user))
 
-        "spotify-search-tracks" (let [term (first args)
-                                      token (spotify/fetch-client-auth-token clientid secret)]
-                                  
-                                  (spotify/search-tracks token term))
+        "spotify-search-tracks"
+        (let [term (first args)
+              token (spotify/fetch-client-auth-token clientid secret)]
+          (spotify/search-tracks token term))
 
-        "spotify-search-track" (let [term (first args)
-                                     token (spotify/fetch-client-auth-token clientid secret)]
-                                 
-                                 (spotify/search-track token term))
+        "spotify-search-track"
+        (let [term (first args)
+              token (spotify/fetch-client-auth-token clientid secret)]
+          (spotify/search-track token term))
 
         ;; output a list of pairs; the first item is the lastfm track and the second is the spotify track (or null)
-        "lastfm-and-spotify" (let [lastfm-tracks (json/read (InputStreamReader. System/in) :key-fn keyword)
-                                   token (spotify/fetch-client-auth-token clientid secret)]
-                               (map #(vector % (lastfm-to-spotify token %)) lastfm-tracks))
+        "lastfm-and-spotify"
+        (let [lastfm-tracks (json/read (InputStreamReader. System/in) :key-fn keyword)
+              token (spotify/fetch-client-auth-token clientid secret)]
+          (map #(vector % (lastfm-to-spotify token %)) lastfm-tracks))
 
-        "spotify-get-track" (let [id (first args)
-                                  token (spotify/fetch-client-auth-token clientid secret)]
-                              
-                              (spotify/get-track token id))
+        "spotify-get-track"
+        (let [id (first args)
+              token (spotify/fetch-client-auth-token clientid secret)]
+          (spotify/get-track token id))
 
         "spotify-auth-token" (spotify/fetch-client-auth-token clientid secret)
 
         "spotify-user-auth"
         (spotify/user-authorize clientid secret authserver (string/join " " args))
 
-        "spotify-current-user" (spotify/get-current-user
-                                (spotify/fetch-user-auth-token clientid secret authserver))
+        "spotify-current-user"
+        (spotify/get-current-user
+         (spotify/fetch-user-auth-token clientid secret authserver))
         
-        "spotify-current-user-playlists" (spotify/get-current-user-playlists
-                                          (spotify/fetch-user-auth-token clientid secret authserver))
+        "spotify-current-user-playlists"
+        (spotify/get-current-user-playlists
+         (spotify/fetch-user-auth-token clientid secret authserver))
 
-        "spotify-get-playlist" (let [playlist-id (first args)]
-                                 (spotify/get-playlist
-                                  (spotify/fetch-user-auth-token clientid secret authserver)
-                                  playlist-id))
+        "spotify-get-playlist"
+        (let [playlist-id (first args)]
+          (spotify/get-playlist
+           (spotify/fetch-user-auth-token clientid secret authserver)
+           playlist-id))
 
-        "spotify-create-playlist" (let [token (spotify/fetch-user-auth-token clientid secret authserver "playlist-modify-public")
-                                       user-id (:id (spotify/get-current-user token))
-                                       playlist-name (first args)]
-                                   (spotify/create-playlist token user-id playlist-name)))))))
+        "spotify-create-playlist"
+        (let [token (spotify/fetch-user-auth-token clientid secret authserver "playlist-modify-public")
+              user-id (:id (spotify/get-current-user token))
+              playlist-name (first args)]
+          (spotify/create-playlist token user-id playlist-name)))))))
