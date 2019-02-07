@@ -110,7 +110,20 @@ $ SPOTIFY_AUTH_TOKEN=A_REALLY_LONG_ACCESS_TOKEN lein run spotify-current-user | 
 }
 ```
 
+You can ask for specific authorization scopes:
+
+```bash
+
+lein run spotify-user-auth playlist-modify-public playlist-modify-private
+
+```
+
 If you omit the SPOTIFY_AUTH_TOKEN variable setting, the user auth step happens automatically.
+
+NOTE that if you supply the SPOTIFY_AUTH_TOKEN environment variable to
+later calls that require specific priveleges, its scope will not be
+checked! So make sure you use the right auth call, or Spotify will
+refuse permission to do things.
 
 ##### playlists
 
@@ -138,7 +151,7 @@ SPOTIFY_AUTH_TOKEN=A_REALLY_LONG_ACCESS_TOKEN lein run spotify-current-user-play
 
 ```
 
-Retrieve playlsits by id:
+Retrieve playlist by id:
 
 ```bash
 
@@ -159,6 +172,54 @@ SPOTIFY_AUTH_TOKEN=BQDdz9O_E3vro3uT9kxKptdbB98SqRb3YtyaZXevq2YvsCsityOBVpPPmTxa0
     },
 	
 	// ... much more data ensues, including tracks
+
+```
+
+Create a playlist:
+
+```bash
+
+$ lein run spotify-create-playlist "Test created playlist" | jq
+
+{
+  "description": "Created automatically by spotty-fm",
+  "images": [],
+  "name": "Test created playlist",
+  "snapshot_id": "MSwyOTBlMTNhZDRmZjcyNmM1ZjBhYjc4NGE3Yzk4MWVmNjQ5ODFhNGEx",
+  "public": true,
+  "tracks": {
+    "href": "https://api.spotify.com/v1/playlists/7LIO0XUoThpo6fyAqaXO4W/tracks",
+    "items": [],
+    "limit": 100,
+    "next": null,
+    "offset": 0,
+    "previous": null,
+    "total": 0
+  },
+  "type": "playlist",
+  "collaborative": false,
+  "external_urls": {
+    "spotify": "https://open.spotify.com/playlist/7LIO0XUoThpo6fyAqaXO4W"
+  },
+  "id": "7LIO0XUoThpo6fyAqaXO4W",
+  "uri": "spotify:user:codefarmer:playlist:7LIO0XUoThpo6fyAqaXO4W",
+  "followers": {
+    "href": null,
+    "total": 0
+  },
+  "owner": {
+    "display_name": "codefarmer",
+    "external_urls": {
+      "spotify": "https://open.spotify.com/user/codefarmer"
+    },
+    "href": "https://api.spotify.com/v1/users/codefarmer",
+    "id": "codefarmer",
+    "type": "user",
+    "uri": "spotify:user:codefarmer"
+  },
+  "href": "https://api.spotify.com/v1/playlists/7LIO0XUoThpo6fyAqaXO4W",
+  "primary_color": null
+}
 
 ```
 

@@ -1,6 +1,7 @@
 (ns spotty-fm.main
 
   (:require [org.httpkit.client :as http]
+            [clojure.string :as string]
             [clojure.data.json :as json]
             [spotty-fm.lastfm :as lastfm]
             [spotty-fm.spotify :as spotify]
@@ -67,7 +68,8 @@
 
         "spotify-auth-token" (spotify/fetch-client-auth-token clientid secret)
 
-        "spotify-user-auth" (spotify/user-authorize clientid secret authserver)
+        "spotify-user-auth"
+        (spotify/user-authorize clientid secret authserver (string/join " " args))
 
         "spotify-current-user" (spotify/get-current-user
                                 (spotify/fetch-user-auth-token clientid secret authserver))
@@ -78,4 +80,9 @@
         "spotify-get-playlist" (let [playlist-id (first args)]
                                  (spotify/get-playlist
                                   (spotify/fetch-user-auth-token clientid secret authserver)
-                                  playlist-id)))))))
+                                  playlist-id))
+
+        "spotify-create-playlist" (let [token (spotify/fetch-user-auth-token clientid secret authserver "playlist-modify-public")
+                                       user-id (:id (spotify/get-current-user token))
+                                       playlist-name (first args)]
+                                   (spotify/create-playlist token user-id playlist-name)))))))

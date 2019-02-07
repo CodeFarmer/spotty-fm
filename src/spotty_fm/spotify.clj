@@ -69,11 +69,14 @@
 
 (defn -user-authorize!
   "Initiate the user authorization flow by opening a browser window and passing a state string to identify the auth request"
-  [client-id auth-server state]
-  (browse-url (str "https://accounts.spotify.com/authorize?" (query-string {:client_id client-id
-                                                                            :response_type "code"
-                                                                            :redirect_uri (str auth-server "/authorized")
-                                                                            :state state}))))
+
+  [client-id auth-server state scopes]
+  (browse-url (str "https://accounts.spotify.com/authorize?"
+                   (query-string {:client_id client-id
+                                  :response_type "code"
+                                  :redirect_uri (str auth-server "/authorized")
+                                  :state state
+                                  :scope scopes}))))
 
 (defn -retrieve-auth-code
   "Given a state string, make a blocking call to a spotty-auth server to get the associated authorization code"
@@ -94,20 +97,27 @@
       
       (json/read-str body :key-fn keyword)))
 
-;; TODO add scope arg
 (defn user-authorize
   "Initiate the user auth flow in a browser, then coordinate with spotty-auth server and Spotify to retrieve the user authorization object (TTL, auth and refresh tokens)"
-  [client-id secret auth-server]
-  (let [state (rand-str 64)]
-    (-user-authorize! client-id auth-server state)
-    (-user-auth-for-code client-id secret auth-server (-retrieve-auth-code auth-server state))))
+
+  ([client-id secret auth-server]
+   (user-authorize client-id secret auth-server ""))
+  
+  ([client-id secret auth-server scopes]
+   (let [state (rand-str 64)]
+     (-user-authorize! client-id auth-server state scopes)
+     (-user-auth-for-code client-id secret auth-server (-retrieve-auth-code auth-server state)))))
 
 (defn fetch-user-auth-token
-  "Convenience function: check for SPOTIFY_AUTH_TOKEN environment variable; if none exists then start the user auth flow in a browser, extract the token immediately discarding the other auth info (such as refresh)."
-  [client-id secret auth-server]
-  (if-let [override (env :spotify-auth-token)]
-    override
-    (:access_token (user-authorize client-id secret auth-server))))
+  "Convenience function: check for SPOTIFY_AUTH_TOKEN environment variable; if none exists then start the user auth flow in a browser, extract the token immediately discarding the other auth info (such as refresh). NOTE that if the environment variable is set, scope will not be checked!"
+
+  ([client-id secret auth-server]
+   (fetch-user-auth-token client-id secret auth-server ""))
+  
+  ([client-id secret auth-server scope]
+   (if-let [override (env :spotify-auth-token)]
+     override
+     (:access_token (user-authorize client-id secret auth-server scope)))))
 
 ;; Tracks
 
@@ -170,4 +180,17 @@
   (let [{:keys [status headers body error] :as resp}
         @(http/get (str "https://api.spotify.com/v1/playlists/" playlist-id)
                    {:headers (bearer-auth-header token)})]
+    (json/read-str body :key-fn keyword)))
+
+
+(defn create-playlist
+  [token user-id name]
+  (let [{:keys [status headers body error] :as resp}
+        @(http/post (str "https://api.spotify.com/v1/users/" user-id "/playlists")
+                    {:headers (assoc (bearer-auth-header token)
+                                     "Content-type" "application/json")
+                     
+                     :body (json/write-str {:name name
+                                            :description "Created automatically by spotty-fm"})})]
+    
     (json/read-str body :key-fn keyword)))

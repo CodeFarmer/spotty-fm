@@ -43,10 +43,10 @@
 
 - [ ] Add non-default scopes to user auth requests
 
-- [-] create lastfm playlist
+- [X] create lastfm playlist
   - this requires user auth, see above
   - [X] wait actually how do you get a spotify ID?
-  - [ ] from scratch
+  - [X] from scratch
 
 - [ ] Add tracks to playlist
 
