@@ -13,20 +13,16 @@
   (:gen-class))
 
 
-(defn accept-spotify-auth [req]
-   {:status  200
-    :headers {"Content-Type" "text/html"}
-    :body    "Thanks!"})
-
-(def spotify-auth-url (str "https://accounts.spotify.com/authorize?response_type=code"
-                           "&client_id=" (:clientid (:spotify config))
-                           "&scope=playlist-modify-private"))
-
-
 (defn lastfm-to-spotify [token simple-track]
   (spotify/search-track
    token (str (:artist simple-track) " " (:title simple-track))))
 
+(defn lastfm-user-tag-to-spotify-uris
+  [lastfm-api-key lastfm-user tag spotify-auth-token]
+  (->> (lastfm/user-tagged-tracks lastfm-api-key lastfm-user tag)
+       (map #(lastfm-to-spotify spotify-auth-token %))
+       (filter (complement nil?))
+       (map #(str "spotify:track:" (:spotify-id %)))))
 
 (defn -main [arg & args]
 
@@ -90,4 +86,15 @@
         (let [token (spotify/fetch-user-auth-token clientid secret authserver "playlist-modify-public")
               user-id (:id (spotify/get-current-user token))
               playlist-name (first args)]
-          (spotify/create-playlist token user-id playlist-name)))))))
+          (spotify/create-playlist token user-id playlist-name))
+
+        "tag-to-playlist"
+        (let [token (spotify/fetch-user-auth-token clientid secret authserver "playlist-modify-public")
+              [lastfm-user lastfm-tag & _] args
+              user-id (:id (spotify/get-current-user token))
+              playlist-name (str "last.fm tag: " lastfm-tag)
+              uris (lastfm-user-tag-to-spotify-uris apikey lastfm-user lastfm-tag token)
+              playlist-id (:id (spotify/create-playlist token user-id playlist-name))]
+
+          (spotify/add-tracks-to-playlist token playlist-id uris)
+          (spotify/get-playlist token playlist-id)))))))

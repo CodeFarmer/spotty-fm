@@ -48,7 +48,16 @@
   - [X] wait actually how do you get a spotify ID?
   - [X] from scratch
 
-- [ ] Add tracks to playlist
+- [X] add URI to spotify/simple-track
+  - IDs don't work for building playlists
+
+- [X] Add tracks to playlist
+
+- [X] Directly convert lastfm tag to spotify playlist in a single command
+- [ ] ditto loved
+
+- [ ] Make sure whole lists are getting added
+  - can only add 100 at a time, beware ;)
 
 - [ ] refactor main to include command line usage
 

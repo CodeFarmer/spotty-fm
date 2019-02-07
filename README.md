@@ -314,4 +314,21 @@ $ lein run lastfm-user-tag CodeFarmer "ohrwurm" | lein run lastfm-and-spotify | 
 
 ```
 
+Directly creating a Spotify playlists from a last.fm tag:
 
+```bash
+
+$ lein run tag-to-playlist CodeFarmer ohrwurm | jq
+
+
+  "description": "Created automatically by spotty-fm",
+  "images": [
+    {
+      "height": 640,
+      "url": "https://mosaic.scdn.co/640/1bf2f37433589c773fa9e77a231febbcc59de11087870cccd6d0fa2b7507c379f4f98d8f6dfdadc1d715fc9f329671b465cc19c224604616189f691ef06f0658ccc185e6e884fe4af76b217c4fe478c7",
+      "width": 640
+    },
+	
+	// and a lot more data :)
+
+```

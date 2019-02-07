@@ -182,7 +182,6 @@
                    {:headers (bearer-auth-header token)})]
     (json/read-str body :key-fn keyword)))
 
-
 (defn create-playlist
   [token user-id name]
   (let [{:keys [status headers body error] :as resp}
@@ -192,5 +191,16 @@
                      
                      :body (json/write-str {:name name
                                             :description "Created automatically by spotty-fm"})})]
+    
+    (json/read-str body :key-fn keyword)))
+
+(defn add-tracks-to-playlist
+  [token playlist-id track-uris]
+  (let [{:keys [status headers body error] :as resp}
+        @(http/post (str "https://api.spotify.com/v1/playlists/" playlist-id "/tracks")
+                    {:headers (assoc (bearer-auth-header token)
+                                     "Content-type" "application/json")
+                     
+                     :body (json/write-str {:uris track-uris})})]
     
     (json/read-str body :key-fn keyword)))
