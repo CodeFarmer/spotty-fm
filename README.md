@@ -22,6 +22,10 @@ $ lein run lastfm-user-tag CodeFarmer "greatest songs of all time"
 $ lein run lastfm-user-loved CodeFarmer
 ```
 
+```bash
+$ lein run lastfm-user-tags CodeFarmer
+```
+
 #### spotify
 
 Track search by text:

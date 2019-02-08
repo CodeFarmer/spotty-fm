@@ -61,7 +61,7 @@
 
 - [ ] refactor main to include command line usage
 
-- [ ] can you get a list of a lastfm user's tags?
+- [X] can you get a list of a lastfm user's tags?
 
 - [X] find out why "Adorable Homeboy" works in the search bar but not in the track search
   - It turns out some tracks won't appear if you're not signed in (and

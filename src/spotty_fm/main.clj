@@ -59,6 +59,9 @@
         "lastfm-user-loved"
         (let [user (first args)] (lastfm/user-loved-tracks apikey user))
 
+        "lastfm-user-tags"
+        (let [user (first args)] (lastfm/user-tags apikey user))
+                
         "spotify-search-tracks"
         (let [term (first args)
               token (spotify/fetch-client-auth-token clientid secret)]
