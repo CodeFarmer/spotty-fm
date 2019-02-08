@@ -54,9 +54,9 @@
 - [X] Add tracks to playlist
 
 - [X] Directly convert lastfm tag to spotify playlist in a single command
-- [ ] ditto loved
+- [X] ditto loved
 
-- [ ] Make sure whole lists are getting added
+- [X] Make sure whole lists are getting added
   - can only add 100 at a time, beware ;)
 
 - [ ] refactor main to include command line usage
@@ -74,6 +74,8 @@
   - [ ] use spec to describe config?
 
 - [ ] deal with pagination of last.fm response
+- [ ] deal with spotify rate limiting
+  - retry-after header
 
 - [ ] unit tests?
   - [ ] mock HTTP thingy

@@ -332,3 +332,11 @@ $ lein run tag-to-playlist CodeFarmer ohrwurm | jq
 	// and a lot more data :)
 
 ```
+
+(This next one can end up running afoul of spotify's rate API limits, dealing with the retry-after header is a near-future intention but) build a playlist for a user's loved tracks:
+
+```bash
+
+$ lein run loved-to-playlist CodeFarmer
+
+```
