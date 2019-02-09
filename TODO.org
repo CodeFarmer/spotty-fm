@@ -1,11 +1,12 @@
 - [ ] Add non-default scopes to user auth requests
 
-- [ ] Make sure whole lists are getting added
   - can only add 100 at a time, beware ;)
+
+- [ ] refactor requests to DRY up a lot
 
 - [ ] refactor main to include command line usage
 
-- [ ] can you get a list of a lastfm user's tags?
+- [X] can you get a list of a lastfm user's tags?
 
 - [ ] Build offline database of mappings that don't work using the default feeling-lucky search
 
@@ -14,6 +15,8 @@
   - [ ] use spec to describe config?
 
 - [ ] deal with pagination of last.fm response
+- [ ] deal with spotify rate limiting
+  - retry-after header
 
 - [ ] unit tests?
   - [ ] mock HTTP thingy

@@ -17,12 +17,29 @@
   (spotify/search-track
    token (str (:artist simple-track) " " (:title simple-track))))
 
-(defn lastfm-user-tag-to-spotify-uris
-  [lastfm-api-key lastfm-user tag spotify-auth-token]
-  (->> (lastfm/user-tagged-tracks lastfm-api-key lastfm-user tag)
+(defn lastfm-tracks-to-spotify-uris
+  [lastfm-tracks spotify-auth-token]
+  (->> lastfm-tracks
        (map #(lastfm-to-spotify spotify-auth-token %))
        (filter (complement nil?))
        (map #(str "spotify:track:" (:spotify-id %)))))
+
+(defn lastfm-user-tag-to-spotify-uris
+  [lastfm-api-key lastfm-user tag spotify-auth-token]
+  (lastfm-tracks-to-spotify-uris (lastfm/user-tagged-tracks lastfm-api-key lastfm-user tag) spotify-auth-token))
+
+(defn lastfm-user-loved-to-spotify-uris
+  [lastfm-api-key lastfm-user spotify-auth-token]
+  (lastfm-tracks-to-spotify-uris (lastfm/user-loved-tracks lastfm-api-key lastfm-user) spotify-auth-token))
+
+
+(defn page
+  "return a seq of the sequences created by taking n items at a time (unless there are less than that remaining, in which case the remainder is the last element"
+  [n aseq]
+  (if (empty? aseq)
+    '()
+    (cons (take n aseq) (page n (drop n aseq)))))
+
 
 (defn -main [arg & args]
 
@@ -42,6 +59,9 @@
         "lastfm-user-loved"
         (let [user (first args)] (lastfm/user-loved-tracks apikey user))
 
+        "lastfm-user-tags"
+        (let [user (first args)] (lastfm/user-tags apikey user))
+                
         "spotify-search-tracks"
         (let [term (first args)
               token (spotify/fetch-client-auth-token clientid secret)]
@@ -88,6 +108,13 @@
               playlist-name (first args)]
           (spotify/create-playlist token user-id playlist-name))
 
+        "add-spotify-ids-to-playlist"
+        (let [token (spotify/fetch-user-auth-token clientid secret authserver "playlist-modify-public")
+              playlist-id (first args)
+              track-ids (json/read (InputStreamReader. System/in))]
+          (doseq [tids (page 100 track-ids)]
+            (spotify/add-tracks-to-playlist token playlist-id (map #(str "spotify:track:" %) tids))))
+
         "tag-to-playlist"
         (let [token (spotify/fetch-user-auth-token clientid secret authserver "playlist-modify-public")
               [lastfm-user lastfm-tag & _] args
@@ -97,4 +124,17 @@
               playlist-id (:id (spotify/create-playlist token user-id playlist-name))]
 
           (spotify/add-tracks-to-playlist token playlist-id uris)
+          (spotify/get-playlist token playlist-id))
+
+        ;; This doesn't work, API rate limit kicks in.
+        "loved-to-playlist"
+        (let [token (spotify/fetch-user-auth-token clientid secret authserver "playlist-modify-public")
+              lastfm-user (first args)
+              user-id (:id (spotify/get-current-user token))
+              playlist-name (str "last.fm loved tracks for " lastfm-user)
+              paged-uris (page 100 (lastfm-user-loved-to-spotify-uris apikey lastfm-user token))
+              playlist-id (:id (spotify/create-playlist token user-id playlist-name))]
+
+          (doseq [uris paged-uris]
+            (spotify/add-tracks-to-playlist token playlist-id uris))
           (spotify/get-playlist token playlist-id)))))))

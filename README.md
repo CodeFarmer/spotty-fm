@@ -22,6 +22,10 @@ $ lein run lastfm-user-tag CodeFarmer "greatest songs of all time"
 $ lein run lastfm-user-loved CodeFarmer
 ```
 
+```bash
+$ lein run lastfm-user-tags CodeFarmer
+```
+
 #### spotify
 
 Track search by text:
@@ -43,7 +47,7 @@ $ lein run spotify-search-track "isrc:USQE91000035"
 {"title":"Rill Rill","artist":"Sleigh Bells","isrc":"USQE91000035","spotify-id":"3GbjOImkNo5nFT2GQxVr11"}
 ```
 
-NOTE: Getting alist of Spotify isrc fields:
+NOTE: Getting alist of Spotify isrc fields (also useful for spotify-ids):
 
 ```
 $ lein run spotify-search-tracks "Christine and the Queens Tilted" | jq 'map(.isrc)'
@@ -81,7 +85,7 @@ $ SPOTIFY_AUTH_TOKEN=BQAIpqoi83ubm8xkhDT0gqWzaGI7eaXjP_v4Q3QOcz5_g3TllIplXTECxYm
 ```bash
 $ lein run spotify-user-auth | jq
 {
-  "access_token": "A_REALLY_LONG_ACESS_TOKEN",
+  "access_token": "A_REALLY_LONG_ACCESS_TOKEN",
   "token_type": "Bearer",
   "expires_in": 3600,
   "refresh_token": "A_REALLY_LONG_REFRESH_TOKEN",
@@ -130,25 +134,6 @@ refuse permission to do things.
 ```bash
 
 SPOTIFY_AUTH_TOKEN=A_REALLY_LONG_ACCESS_TOKEN lein run spotify-current-user-playlists | jq
-
-{
-  "href": "https://api.spotify.com/v1/users/codefarmer/playlists?offset=0&limit=20",
-  "items": [
-    {
-      "images": [
-        {
-          "height": 640,
-          "url": "https://mosaic.scdn.co/640/23c496a83b3d5ad1bc2873c7bec793dcb12b45c42b59708cd72885507fd342cfe71df55e78b7b218467b198f28674ab3136278d0d79ca6010a6a104794c5cf08ea9783b4b8373e3def893991eb80dcad",
-          "width": 640
-        },
-        {
-          "height": 300,
-          "url": "https://mosaic.scdn.co/300/23c496a83b3d5ad1bc2873c7bec793dcb12b45c42b59708cd72885507fd342cfe71df55e78b7b218467b198f28674ab3136278d0d79ca6010a6a104794c5cf08ea9783b4b8373e3def893991eb80dcad",
-          "width": 300
-        },
-		
-		// ... much more data, but no tracks
-
 ```
 
 Retrieve playlist by id:
@@ -156,22 +141,6 @@ Retrieve playlist by id:
 ```bash
 
 SPOTIFY_AUTH_TOKEN=BQDdz9O_E3vro3uT9kxKptdbB98SqRb3YtyaZXevq2YvsCsityOBVpPPmTxa0XV7JK6aq6WhMwbFuOENrgTXbOKz-bba2KTzTk6TUl0Ft-LsOTwiVExdQEXNPUG9QvDiIVC3gE6gklxMqlL6N9lG lein run spotify-get-playlist 6lBLh2ovTqIU1Cxd6zFgU9 | jq
-
-{
-  "description": "",
-  "images": [
-    {
-      "height": 640,
-      "url": "https://mosaic.scdn.co/640/23c496a83b3d5ad1bc2873c7bec793dcb12b45c42b59708cd72885507fd342cfe71df55e78b7b218467b198f28674ab3136278d0d79ca6010a6a104794c5cf08ea9783b4b8373e3def893991eb80dcad",
-      "width": 640
-    },
-    {
-      "height": 300,
-      "url": "https://mosaic.scdn.co/300/23c496a83b3d5ad1bc2873c7bec793dcb12b45c42b59708cd72885507fd342cfe71df55e78b7b218467b198f28674ab3136278d0d79ca6010a6a104794c5cf08ea9783b4b8373e3def893991eb80dcad",
-      "width": 300
-    },
-	
-	// ... much more data ensues, including tracks
 
 ```
 
@@ -320,15 +289,12 @@ Directly creating a Spotify playlists from a last.fm tag:
 
 $ lein run tag-to-playlist CodeFarmer ohrwurm | jq
 
+```
 
-  "description": "Created automatically by spotty-fm",
-  "images": [
-    {
-      "height": 640,
-      "url": "https://mosaic.scdn.co/640/1bf2f37433589c773fa9e77a231febbcc59de11087870cccd6d0fa2b7507c379f4f98d8f6dfdadc1d715fc9f329671b465cc19c224604616189f691ef06f0658ccc185e6e884fe4af76b217c4fe478c7",
-      "width": 640
-    },
-	
-	// and a lot more data :)
+(This next one can end up running afoul of spotify's rate API limits, dealing with the retry-after header is a near-future intention but) build a playlist for a user's loved tracks:
+
+```bash
+
+$ lein run loved-to-playlist CodeFarmer
 
 ```

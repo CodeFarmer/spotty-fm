@@ -22,3 +22,7 @@
             "Known spotify track should be returned for known lastfm track")))))
 
 
+(deftest test-page
+  (let [alist [1 2 3 4 5 6 7 8 9]]
+    (is (= [1 2 3] (first (page 3 alist))))
+    (is (= [9] (last (page 2 alist))))))
