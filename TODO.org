@@ -1,12 +1,6 @@
-- [ ] Add non-default scopes to user auth requests
-
-  - can only add 100 at a time, beware ;)
-
 - [ ] refactor requests to DRY up a lot
 
 - [ ] refactor main to include command line usage
-
-- [X] can you get a list of a lastfm user's tags?
 
 - [ ] Build offline database of mappings that don't work using the default feeling-lucky search
 
