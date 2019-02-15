@@ -1,4 +1,4 @@
-(defproject spotty-fm "0.1.0-SNAPSHOT"
+(defproject spotty-fm "1.0"
 
   :description "Using last.fm and spotify data together"
   :url "http://example.com/FIXME"
